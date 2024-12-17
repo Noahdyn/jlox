@@ -100,8 +100,7 @@ class Scanner {
 					while (peek() != '\n' && !isAtEnd())
 						advance();
 				} else if (match('*')) {
-					while (peek() != '*' && peekNext() != '/' && !isAtEnd())
-						advance();
+					blockComment();
 				} else {
 					addToken(SLASH);
 				}
@@ -172,6 +171,21 @@ class Scanner {
 		// Here you could also handle escape characters like backslashes
 		String value = source.substring(start + 1, current - 1);
 		addToken(STRING, value);
+	}
+
+	private void blockComment() {
+		while (!(peek() == '*' && peekNext() == '/') && !isAtEnd()) {
+			if (peek() == '\n')
+				line++;
+			advance();
+		}
+		if (isAtEnd()) {
+			Lox.error(line, "Unterminated block comment.");
+			return;
+		}
+		// The closing */
+		advance();
+		advance();
 	}
 
 	private boolean match(char expected) {
