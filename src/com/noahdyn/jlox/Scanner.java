@@ -174,18 +174,26 @@ class Scanner {
 	}
 
 	private void blockComment() {
-		while (!(peek() == '*' && peekNext() == '/') && !isAtEnd()) {
-			if (peek() == '\n')
-				line++;
-			advance();
+		int unterminatedComments = 1;
+		while (unterminatedComments > 0 && !isAtEnd()) {
+			if (peek() == '/' && peekNext() == '*') {
+				unterminatedComments += 1;
+				advance();
+				advance();
+			} else if (peek() == '*' && peekNext() == '/') {
+				unterminatedComments -= 1;
+				advance();
+				advance();
+			} else {
+				if (peek() == '\n')
+					line++;
+				advance();
+			}
 		}
 		if (isAtEnd()) {
 			Lox.error(line, "Unterminated block comment.");
 			return;
 		}
-		// The closing */
-		advance();
-		advance();
 	}
 
 	private boolean match(char expected) {
