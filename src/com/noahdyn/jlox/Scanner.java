@@ -9,7 +9,7 @@ import static com.noahdyn.jlox.TokenType.*;
 
 class Scanner {
 	private final String source;
-	private final List<Token> tokens = new ArrayList();
+	private final List<Token> tokens = new ArrayList<>();
 	private int start = 0;
 	private int current = 0;
 	private int line = 1;
@@ -99,6 +99,9 @@ class Scanner {
 					// A comment goes until the end of the line
 					while (peek() != '\n' && !isAtEnd())
 						advance();
+				} else if (match('*')) {
+					while (peek() != '*' && peekNext() != '/' && !isAtEnd())
+						advance();
 				} else {
 					addToken(SLASH);
 				}
@@ -180,13 +183,13 @@ class Scanner {
 		return true;
 	}
 
-	private character peek() {
+	private char peek() {
 		if (isAtEnd())
 			return '\0';
 		return source.charAt(current);
 	}
 
-	private character peekNext() {
+	private char peekNext() {
 		if (current + 1 >= source.length())
 			return '\0';
 		return source.charAt(current + 1);
@@ -211,7 +214,7 @@ class Scanner {
 	}
 
 	private char advance() {
-		source.charAt(current++);
+		return source.charAt(current++);
 	}
 
 	private void addToken(TokenType type) {
