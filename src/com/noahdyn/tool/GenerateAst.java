@@ -19,7 +19,7 @@ public class GenerateAst {
         "Binary   : Expr left, Token operator, Expr right",
         "Grouping : Expr expression",
         "Literal  : Object value",
-        "Unary:   : Token operator, Expr right"));
+        "Unary   : Token operator, Expr right"));
   }
 
   private static void defineAst(String outputDir, String baseName, List<String> types) throws IOException {
@@ -49,6 +49,15 @@ public class GenerateAst {
 
     // Store parameters in fields.
     String[] fields = fieldList.split(", ");
+    for (String field : fields) {
+      String name = field.split(" ")[1];
+      writer.println("  this." + name + " = " + name + ";");
+    }
+
+    writer.println("   }");
+
+    // Fields..
+    writer.println();
     for (String field : fields) {
       writer.println("  final " + field + ";");
     }
