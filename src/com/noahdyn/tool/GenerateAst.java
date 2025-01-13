@@ -27,7 +27,7 @@ public class GenerateAst {
     PrintWriter writer = new PrintWriter(path, "UTF-8");
     writer.println("package com.noahdyn.jlox;");
     writer.println();
-    writer.println("import java.util.list;");
+    writer.println("import java.util.List;");
     writer.println();
     writer.println("abstract class " + baseName + " {");
 
